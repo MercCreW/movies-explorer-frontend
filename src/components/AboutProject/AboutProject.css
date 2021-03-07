@@ -1,0 +1,118 @@
+.AboutProject{
+    padding: 110px 70px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.aboutProject__content{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 40px;
+    margin: 0;
+    list-style: none;
+    padding: 70px 0 110px;
+}
+
+.aboutProject__subtitle{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0px;
+    padding-bottom: 26px;
+    letter-spacing: -0.04em;
+}
+
+.aboutProject__description{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0px;
+}
+
+.progress-bar{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-row-gap: 14px;
+}
+
+.progress-bar__item{
+    padding: 9px 14px;
+    box-sizing: border-box;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+} 
+
+.progress-bar__item_color_blue{
+    color:white;
+    background-color: #3456F3;
+
+}
+
+.progress-bar__item_color_grey{
+    background-color: #F2F2F2;
+}
+
+.progress-bar__description{
+    font-family: Suisse Intl;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: #A0A0A0;
+}
+
+@media (max-width: 767px){
+    .AboutProject{
+        padding: 70px 18px;
+        box-sizing: border-box;
+    }
+
+    .aboutProject__content{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(284px, 1fr));
+        grid-gap: 56px;
+        padding: 60px 0;
+    }
+    
+    .aboutProject__subtitle{
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: -0.04em;
+        padding-bottom: 16px;
+    }
+
+    .aboutProject__subtitle{
+        font-size: 18px;
+        line-height: 22px;
+    }
+    
+    .aboutProject__description{
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .progress-bar{
+        display: grid;
+        grid-template-columns: 1fr 1.84fr;
+        grid-row-gap: 14px;
+    }
+
+    .progress-bar__item{
+        padding: 11px 10px;
+        font-size: 11px;
+        line-height: 13px;
+
+    } 
+
+    .progress-bar__description{
+        font-size: 11px;
+        line-height: 13px;
+    }
+}
