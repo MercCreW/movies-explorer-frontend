@@ -1,0 +1,113 @@
+.search {
+    padding: 80px 70px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid #E8E8E8;
+    background-color: #FAFAFA;
+  }
+  
+  .search__form {
+      display:flex;
+      background-color: transparent;
+      align-items: center;
+      width:100%;
+  }
+  
+  .search__input {
+    background-color:#F4F4F4;
+    min-height: 50px;
+    min-width: 93.51%;
+    border: none;
+    border-radius: 8px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 1.31;
+    color: #A0A0A0;
+    padding: 0px 0px 0px 20px;
+  }
+  
+  .search__button {
+      background-color: #3456F3;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 5px;
+      border: none;
+      object-fit: cover;
+      padding: 0px;
+      display: flex;
+      margin-left: 10px;
+      outline: none;
+  }
+  
+  .search__button:hover {
+    opacity: .7;
+  }
+  
+  .search__img {
+
+  }
+  
+  .search__short {
+    display: flex;
+    align-items: center;
+    padding: 28px 0 0px;
+  }
+  
+  .search__filter-text {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    margin: 0 0 0 12px;
+  }
+    
+.checkbox {
+    width: 36px;
+    height: 20px;
+    background-color: #EBEBEB;
+    position: relative;
+    border-radius: 20px;
+}
+
+.checkbox__label {
+    display: block;
+    position: absolute;
+    border: 1px solid #FFFFFF;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    z-index: 1;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    top: 2px;
+    left: 2px;
+    box-sizing: border-box;
+}
+
+.checkbox__input {
+    visibility: hidden;
+}
+
+.checkbox__input:checked + .checkbox__label {
+    left: 18px;  
+    background-color: #2BE080;
+}
+
+@media (max-width: 768px) {
+  .search {
+    padding: 80px 14px 40px;
+  }
+  .search__input {
+    min-height: 44px;
+    min-width: 77.06%;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 0px 0px 0px 13px;
+  }
+
+  .search__short {
+    padding: 47px 0 0px;
+  }
+}

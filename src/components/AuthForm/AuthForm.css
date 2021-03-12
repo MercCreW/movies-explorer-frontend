@@ -1,0 +1,133 @@
+.form {
+    max-width: 396px;
+    width: 100%;
+    min-height: 425px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form__footer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: flex-end;
+  }
+  
+  .form__submit {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    width: 100%;
+    max-width: 396px;
+    min-height: 45px;
+    background-color: #3456F3;
+    border-radius: 3px;
+    color: #FFF;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    align-self: center;
+  }
+  
+  .form__submit:hover {
+    opacity: .8;
+  }
+  
+  .form__text {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #A0A0A0;
+    align-self: center;
+  }
+  
+  .form__link {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    text-decoration: none;  
+    color: #3456F3;
+    cursor: pointer;
+    padding: 0 6px;
+  }
+  
+  .form__link:hover {
+    text-decoration: underline;
+  }
+  
+  .input {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  
+  .input__label {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 12px;
+    color: #A0A0A0;
+  }
+  
+  .input__field {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    padding: 5px 0 10px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #E8E8E8; 
+  }
+  
+  .input__field:focus {
+    border-bottom: 1px solid #000;
+  }
+  
+  .input__field_error {
+    color: #FF4062;
+  }
+  .input__error {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 12px;
+    color: #FF4062;
+    padding: 6px 0;
+    min-height: 24px;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility .3s, opacity .3s ease;
+  }
+  
+  .input__error_visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  @media (max-width: 1279px) {
+    
+  }
+  
+  @media (max-width: 767px) {
+    .form {
+      padding-top: 30px;
+    }
+    .form__submit {
+      font-size: 12px;
+      line-height: 15px;
+    }
+    .form__text {
+      font-size: 12px;
+      line-height: 15px;
+    }
+    .form__link {
+      font-size: 12px;
+      line-height: 15px;
+    }
+  }

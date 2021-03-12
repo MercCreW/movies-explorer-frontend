@@ -1,0 +1,34 @@
+.register { 
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 396px;
+    margin: 0 auto;
+  }
+  
+  .register__title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    margin: 0;
+    padding: 40px 0;
+  }
+  
+  
+  @media (max-width: 1279px) {
+    .register { 
+      padding: 232px 70px;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .register { 
+      padding: 56px 30px 30px;
+      align-items: center;
+    }
+    .register__title {
+      padding: 50px 0;
+    }
+  }

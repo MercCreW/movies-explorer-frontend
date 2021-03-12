@@ -1,0 +1,127 @@
+.AboutMe{
+    padding: 110px 70px 100px;
+
+}
+
+.aboutMe__container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 66px;
+}
+
+.aboutMe__info{
+   max-width: 600px;
+}
+
+.aboutMe__photo {
+    width: 270px;
+    height: 327px;
+    border-radius: 10px;
+}
+
+.aboutMe__subtitle{
+    margin: 0px;
+    padding: 0px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 50px;
+    line-height: 58px;
+    letter-spacing: -0.04em;
+}
+
+.aboutMe__brief{
+    margin: 18px 0px 26px;
+    padding: 0px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.aboutMe__description{
+    margin: 0px 0px 100px;
+    padding: 0px;
+    min-height: 88px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 22px;
+    mix-blend-mode: normal;
+}
+
+.aboutMe__links{
+    display: flex;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+.aboutMe__links-item{
+    margin-right: 20px;
+}
+
+.aboutme__link{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+    text-decoration: none;
+}
+
+@media (max-width: 1279px) {
+    .AboutMe{
+        padding: 90px 50px;
+    }
+
+    .aboutMe__info{
+        max-width: 364px;
+    }
+}
+
+@media (max-width: 767px) {
+    .AboutMe{
+        padding: 70px 14px 70px;
+    }
+
+    .aboutMe__info{
+        max-width: 292px;
+    }
+
+    .aboutMe__container{
+        display: flex;
+        align-items: center;
+        flex-direction: column-reverse;
+        justify-content: space-between;
+        margin-top: 60px;
+    }
+    
+    .aboutMe__info{
+        max-width: 292px;
+        margin-top: 40px;
+        margin-right: 0px;
+    }
+
+    .aboutMe__subtitle{
+        font-size: 30px;
+        line-height: 36px;
+        letter-spacing: -0.04em;
+    }
+    
+    .aboutMe__brief{
+        margin: 20px 0px;
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .aboutMe__description{
+        margin: 0px 0px 40px;
+        padding: 0px;
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+}
