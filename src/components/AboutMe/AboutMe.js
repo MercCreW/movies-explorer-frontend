@@ -17,8 +17,8 @@ function AboutMe() {
             <ul className="aboutMe__links">
               <li className="aboutMe__links-item">
                 <a className="aboutme__link" href="/">Facebook</a></li>
-              <lin className="aboutMe__links-item">
-                <a className="aboutme__link" href="https://github.com/MercCreW">Github</a></lin>
+              <li className="aboutMe__links-item">
+                <a className="aboutme__link" href="https://github.com/MercCreW">Github</a></li>
             </ul>
           </div>
         <img className="aboutMe__photo" src={photo} alt="Фотография разработчика сайта" />

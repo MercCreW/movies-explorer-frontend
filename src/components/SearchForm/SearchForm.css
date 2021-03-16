@@ -45,6 +45,10 @@
     opacity: .7;
   }
   
+  .search__button_disabled{
+    opacity: .5;
+  }
+
   .search__img {
 
   }
@@ -62,38 +66,7 @@
     line-height: 18px;
     margin: 0 0 0 12px;
   }
-    
-.checkbox {
-    width: 36px;
-    height: 20px;
-    background-color: #EBEBEB;
-    position: relative;
-    border-radius: 20px;
-}
 
-.checkbox__label {
-    display: block;
-    position: absolute;
-    border: 1px solid #FFFFFF;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    z-index: 1;
-    cursor: pointer;
-    transition: all 0.5s ease;
-    top: 2px;
-    left: 2px;
-    box-sizing: border-box;
-}
-
-.checkbox__input {
-    visibility: hidden;
-}
-
-.checkbox__input:checked + .checkbox__label {
-    left: 18px;  
-    background-color: #2BE080;
-}
 
 @media (max-width: 768px) {
   .search {

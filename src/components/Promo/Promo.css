@@ -38,9 +38,8 @@
     align-items: center;
     justify-content:space-around;
     max-width: 129px;
-    min-height: 36px;
+    max-height: 36px;
     border-radius: 3px;
-    box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.6);
     background-color: #DDDEE3;
 }
@@ -49,6 +48,10 @@
     color: #000;
     border-radius: 10px;
     text-decoration: none;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 10px 20px;
   }
 
 @media (max-width: 767px) {
@@ -78,5 +81,6 @@
     letter-spacing: -0.04em;
     color: #000000;
     max-width: 300px;
+    text-shadow: none;
   }
 }
