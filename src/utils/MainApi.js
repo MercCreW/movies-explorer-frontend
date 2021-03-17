@@ -102,7 +102,19 @@ export class MainApi {
             ...this._headers,
             "Authorization" : `Bearer ${token}`
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify({
+            country: data.country,
+            director: data.director,
+            duration: data.duration,
+            year: data.year,
+            description: data.description,
+            image: data.image,
+            trailer: data.trailer,
+            thumbnail: data.image,
+            movieId: data.id,
+            nameRU: data.nameRU,
+            nameEN: data.nameEN,
+          })
         }))
       }
   
@@ -119,8 +131,8 @@ export class MainApi {
   }
   
   const mainApi = new MainApi({
-    baseUrl: 'http://localhost:3001',
-    // baseUrl: 'https://api.vservice.students.nomoreparties.xyz',
+    // baseUrl: 'http://localhost:3001',
+    baseUrl: 'https://api.vservice.students.nomoreparties.xyz',
     headers: {
       'Content-Type': 'application/json'
     }

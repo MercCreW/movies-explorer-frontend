@@ -17,7 +17,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "deployServer": "npm run build && scp -r ./build/* merccrew@178.154.229.149:/home/merccrew/react-mesto-api-full/frontend",
+    "deployServer": "npm run build && scp -r ./build/* merc@130.193.53.29:/home/merc/movies-explorer-frontend",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

@@ -272,6 +272,7 @@ function App() {
   //удаление из избранного
   function deleteMovie(movie) {
     const movieId = savedMovies.find((item) => item.id === movie.id)._id;
+    console.log('удаление из избранного ' + movieId);
     mainApi.deleteMovies(movieId)
     .then((res) => {
       if (res) {
