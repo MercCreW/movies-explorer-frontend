@@ -118,7 +118,7 @@ export class MainApi {
         }))
       }
   
-      deleteMovies(movieId) {
+  deleteMovies(movieId) {
         const token = localStorage.getItem('token');
         return this._getResponseData(fetch(`${this._baseUrl}/movies/${movieId}`, {
           method: 'DELETE',

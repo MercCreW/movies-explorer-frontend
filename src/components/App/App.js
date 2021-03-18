@@ -76,7 +76,6 @@ function App() {
     mainApi.login(email, password)
     .then((res) => {
       if (res.token) {
-        console.log(res.token);
         localStorage.setItem('token', res.token);
         setLoggedIn(true);
         getCurrentUser();
@@ -213,7 +212,6 @@ function App() {
   }, [])
 
   React.useEffect(() => {
-
     if (loggedIn) {
       //после авторизации обновим данные для текущего пользователя
       getInitialMovies();
@@ -272,15 +270,15 @@ function App() {
   //удаление из избранного
   function deleteMovie(movie) {
     const movieId = savedMovies.find((item) => item.id === movie.id)._id;
-    console.log('удаление из избранного ' + movieId);
     mainApi.deleteMovies(movieId)
     .then((res) => {
       if (res) {
-        const newArray = savedMovies.filter((item) => item.movieId!== res.movieId);
+        const newArray = savedMovies.filter((item) => item.movieId !== res.movieId);
         setSavedMovies(newArray);
       }
     })
     .catch((err) => {
+      console.log(movieId);
       setTextPopup('На сервере произошла ошибка');
       setIsInfoPopupOpen(true);
     })
