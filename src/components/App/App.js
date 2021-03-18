@@ -202,7 +202,9 @@ function App() {
     } else {
       getInitialMovies();
     }
-
+  }, [])
+  
+  React.useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('savedMovies'));
     if (saved) {
       setSavedMovies(saved)

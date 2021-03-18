@@ -89,26 +89,32 @@ function Profile({onSaveProfile, onSignOut}) {
        <section className="profile">
            <h2 className="profile__greeting">Привет, {currentUser.name}!</h2>
            <form className="profile__form" action="post" name="profile" noValidate onSubmit={handleOnSubmit}>
-               <label className="profile__label">Имя
-               <input className="profile__input profile__input_type_name" id="name-input" type="text" 
-                                 name="name" placeholder="Имя" required minLength="2" maxLength="30" 
-                                 value={formValues.name} onChange={handleInputChange}/>
-               </label>
-               <label className="profile__label">Почта
-               <input className="profile__input profile__input_type_email" id="email-input" type="text"
+               <article className="profile__info-container">
+                 <label className="profile__label">Имя
+                    <input className="profile__input profile__input_type_name" id="name-input" type="text"
+                    name="name" placeholder="Имя" required minLength="2" maxLength="30" 
+                    value={formValues.name} onChange={handleInputChange}/>
+                 </label>
+               <span className={`profile__error ${!isNameValid && 'profile__error-visible'}`}>{getErrorText(errors.name)}</span>
+               </article>
+               <article className="profile__info-container">
+                  <label className="profile__label">Почта
+                      <input className="profile__input profile__input_type_email" id="email-input" type="text"
                                  name="email" placeholder="Почта" required minLength="5" maxLength="100" 
                                  value={formValues.email} onChange={handleInputChange}/>
-               </label>
+                  </label>
+               </article>
+               <span className={`profile__error ${!isEmailValid && 'profile__error-visible'}`}>{getErrorText(errors.email)}</span>
                <div className="profile__buttons">
                    {viewMode ? (
                        <>
-                            <button className="profile__button profile__button_type_edit" onClick={handleEditClick}>Редактировать</button>
+                            <button className={`profile__button profile__button_type_edit ${isSubmitDisabled && 'profile__button_disabled'}`} 
+                            onClick={handleEditClick} disabled={isSubmitDisabled}>Редактировать</button>
                             <button className="profile__button profile__button_type_signout" onClick={handleSignOut}>Выйти из аккаунта</button>
                        </>
                    ) 
                    :(
                     <>
-                        <span className="profile__error" id="profile-input-error">При обновлении профиля произошла ошибка.</span>
                         <button className="profile__button profile__button_type_save-profile">Cохранить</button>
                     </>
                    )
