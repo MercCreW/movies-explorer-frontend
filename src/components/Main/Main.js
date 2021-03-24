@@ -9,7 +9,7 @@ import Portfolio from '../Portfolio/Portfolio';
 function Main({loggedIn}) {
   return(
     <main className="mainContent">
-        <Header loggedIn= {loggedIn}/>
+        {/* <Header loggedIn= {loggedIn}/> */}
         <Promo />
         <AboutProject />
         <Techs />

@@ -15,6 +15,18 @@
     color: #000000;
 }
 
+.profile__info-container {
+    display: flex;
+    min-height: 32px;
+    flex-direction: column;
+    border-bottom: 1px solid #E8E8E8;
+  }
+
+.profile__info-container:last-of-type {
+    justify-content:flex-end;
+    border-bottom: none;
+  }
+
 .profile__label {
     display: flex;
     justify-content: space-between;
@@ -22,8 +34,6 @@
     font-weight: 500;
     font-size: 11px;
     line-height: 13px;
-    padding: 17px 0;
-    border-bottom: 1px solid #E8E8E8;
   }
   
   .profile__input {
@@ -37,11 +47,6 @@
     outline: none;
     padding: 0;
   }
-
-  .profile__label:last-of-type {
-    border: none;
-  }
-
   
 .profile__form {
     display: flex;
@@ -81,13 +86,17 @@
     margin-bottom: 16px;
 }
 
+.profile__button_disabled {
+    background-color: #F8F8F8;
+}
+
 .profile__button_type_signout{
     font-weight: 500;
     color: #FF004D;
 }
 
 .profile__error{
-    margin-bottom: 20px;
+    visibility: hidden;
     font-family: Inter;
     font-style: normal;
     font-weight: normal;
@@ -95,6 +104,10 @@
     line-height: 13px;
     text-align: center;
     color: #FF004C;
+}
+
+.profile__error-visible{
+    visibility: visible;
 }
 
 .profile__button_type_save-profile{
