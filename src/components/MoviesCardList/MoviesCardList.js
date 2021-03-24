@@ -55,11 +55,11 @@ function MoviesCardList({ savedMovies, movies, onBookmarkClick, isSavedMovie }) 
     renderExtraPortion();
   }
 
+
     return(
         <>
         <section className="cards">
       {
-
         renderMovies.map((movie) => (
           <MoviesCard 
             savedMovies={savedMovies}

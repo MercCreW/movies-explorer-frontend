@@ -5,69 +5,49 @@ import { NavLink } from 'react-router-dom';
 import AuthForm from '../AuthForm/AuthForm';
 import Input from '../Input/Input';
 
-import { getErrorText, checkValid } from '../../utils/formValidator';
+import { getErrorName, getErrorEmail, getErrorPassword} from '../../utils/formValidator';
 
 function Register({onSubmitRegister}) {
 
-  const [formValues, setFormValues] = React.useState({
-    name: '',
-    email: '',
-    password: '',
-  });
+  const [nameInput, setNameInput] = React.useState('');
+  const [failName, setFailName] = React.useState('');
+  const [emailInput, setEmailInput] = React.useState('');
+  const [failEmail, setFailEmail] = React.useState('');
+  const [passwordInput, setPasswordInput] = React.useState('');
+  const [failPassword, setFailPassword] = React.useState('');
+  const [isSubmitDisabled, setIsSubmitDisabled] = React.useState(true);
 
-  function handleInputChange(evt) {
-    const { name, value } = evt.target;   
-    setFormValues({
-      ...formValues,
-      [name] : value 
-    });
+  function handleNameInputChange(evt){
+    setNameInput(evt.target.value);
   }
+  React.useEffect(()=>{
+    setFailName(getErrorName(nameInput));
+  },[nameInput])
 
-  /** валидация формы **/
-  const [errors, setErrors] = React.useState({
-    name: {
-      required: '',
-      minLength: '',
-      maxLength: '',
-    },
-    email: {
-      required: '',
-      minLength: '',
-      isEmail: '',
-    },
-    password: {
-      required: '',
-      minLength: '',
-    },
-  });
 
-  const [isSubmitDisabled, setIsSubmitDisabled] = React.useState(false);
+  function handleEmailInputChange(evt){
+    setEmailInput(evt.target.value);
+  }
+  React.useEffect(()=>{
+    setFailEmail(getErrorEmail(emailInput));
+  },[emailInput])
 
-  React.useEffect(() => {
-    const { name, email, password } = formValues;
 
-    const nameValid = checkValid('name', name);
-    const emailValid = checkValid('email', email);
-    const passwordValid = checkValid('password', password);
+  function handlePasswordInputChange(evt){
+    setPasswordInput(evt.target.value);
+  }
+  React.useEffect(()=>{
+    setFailPassword(getErrorPassword(passwordInput));
+  },[passwordInput])
 
-    setErrors({
-      name: nameValid,
-      email: emailValid,
-      password: passwordValid,
-    });
+  React.useEffect(()=>{
+    setIsSubmitDisabled(failName || failEmail || failPassword)
+  },[failName, failEmail, failPassword])
 
-    const isNameValid = Object.values(nameValid).every((item) => item === '');
-    const isEmailValid = Object.values(emailValid).every((item) => item === '');
-    const isPasswordValid = Object.values(passwordValid).every((item) => item === '');
-    
-    setIsSubmitDisabled(!isNameValid || !isEmailValid || !isPasswordValid);   
 
-  }, [formValues]);
-  
-  /** действия формы **/
   function handleOnSubmit(evt) {
     evt.preventDefault();
-    onSubmitRegister(formValues);
+    onSubmitRegister( {nameInput, emailInput, passwordInput} );
   }
 
 
@@ -92,29 +72,30 @@ function Register({onSubmitRegister}) {
           name="name"
           type="text"
           placeholder="Имя"
-          errorText={getErrorText(errors.name)}
+          errorText={failName}
+          required         
           minLength="2"
           maxLength="30"
-          onChange={handleInputChange}
+          onChange={handleNameInputChange}
         />  
         <Input
           id="email"
           name="email"
           type="email"
           placeholder="E-mail"
-          errorText={getErrorText(errors.name)}
+          errorText={failEmail}
           minLength="5"
           maxLength="100"
-          onChange={handleInputChange}
+          onChange={handleEmailInputChange}
         />  
         <Input
           id="password"
           name="password"
           type="password"
           placeholder="Пароль"
-          errorText={getErrorText(errors.name)}
+          errorText={failPassword}
           minLength="5"
-          onChange={handleInputChange}
+          onChange={handlePasswordInputChange}
         /> 
       </AuthForm>
 

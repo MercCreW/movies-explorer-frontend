@@ -4,7 +4,7 @@ import './AuthForm.css';
 function AuthForm({name, submitText, linkText, link, linkSubText, isSubmitDisabled, handleOnSubmit,...props}) {
   return (
     
-    <form className="form" action="post" name={name} noValidate onSubmit={handleOnSubmit}>
+    <form className="form" name={name} noValidate onSubmit={handleOnSubmit}>
       { 
         props.children 
       }

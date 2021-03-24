@@ -5,60 +5,37 @@ import { NavLink } from 'react-router-dom';
 import AuthForm from '../AuthForm/AuthForm';
 import Input from '../Input/Input';
 
-import { getErrorText, checkValid } from '../../utils/formValidator';
+import { getErrorEmail, getErrorPassword } from '../../utils/formValidator';
 
 function Login({onSubmitLogin}) {
+  const [emailInput, setEmailInput] = React.useState('');
+  const [failEmail, setFailEmail] = React.useState('');
+  const [passwordInput, setPasswordInput] = React.useState('');
+  const [failPassword, setFailPassword] = React.useState('');
+  const [isSubmitDisabled, setIsSubmitDisabled] = React.useState(true);
 
-  const [formValues, setFormValues] = React.useState({
-    email: '',
-    password: '',
-  });
-
-  function handleInputChange(evt) {
-    const { name, value } = evt.target;   
-    setFormValues({
-      ...formValues,
-      [name] : value 
-    });
+  function handleEmailInputChange(evt){
+    setEmailInput(evt.target.value);
   }
+  React.useEffect(()=>{
+    setFailEmail(getErrorEmail(emailInput));
+  },[emailInput])
 
-  /** валидация формы **/
-  const [errors, setErrors] = React.useState({
-    email: {
-      required: '',
-      minLength: '',
-      isEmail: '',
-    },
-    password: {
-      required: '',
-      minLength: '',
-    },
-  });
 
-  const [isSubmitDisabled, setIsSubmitDisabled] = React.useState(false);
-  
-  React.useEffect(() => {
-    const { email, password } = formValues;
+  function handlePasswordInputChange(evt){
+    setPasswordInput(evt.target.value);
+  }
+  React.useEffect(()=>{
+    setFailPassword(getErrorPassword(passwordInput));
+  },[passwordInput])
 
-    const emailValid = checkValid('email', email);
-    const passwordValid = checkValid('password', password);
-
-    setErrors({
-      email: emailValid,
-      password: passwordValid,
-    });
-
-    const isEmailValid = Object.values(emailValid).every((item) => item === '');
-    const isPasswordValid = Object.values(passwordValid).every((item) => item === '');
-    
-    setIsSubmitDisabled(!isEmailValid || !isPasswordValid);   
-
-  }, [formValues]);
-
+  React.useEffect(()=>{
+    setIsSubmitDisabled( failEmail || failPassword )
+  },[failEmail, failPassword])
 
   function handleOnSubmit(evt) {
     evt.preventDefault();
-    onSubmitLogin(formValues);
+    onSubmitLogin({ emailInput, passwordInput });
   }
 
   return (
@@ -82,8 +59,8 @@ function Login({onSubmitLogin}) {
           placeholder="E-mail"
           minLength="5"
           maxLength="100"
-          errorText={getErrorText(errors.email)}
-          onChange={handleInputChange}
+          errorText={failEmail}
+          onChange={handleEmailInputChange}
         />  
         <Input
           id="password"
@@ -92,8 +69,8 @@ function Login({onSubmitLogin}) {
           placeholder="Пароль"
           errorText="Что-то пошло не так..."
           minLength="5"
-          errorText={getErrorText(errors.password)}
-          onChange={handleInputChange}
+          errorText={failPassword}
+          onChange={handlePasswordInputChange}
         /> 
       </AuthForm>
 

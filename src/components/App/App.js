@@ -18,18 +18,29 @@ import mainApi from '../../utils/MainApi';
 import moviesApi from '../../utils/MoviesApi';
 
 function App() {
+
   const [isLoading, setIsLoading] = React.useState(false);
   const [loadingError, setLoadingError] = React.useState('');
   
-  /*** авторизация, регистрация ***/
+  // Стейты пользователя
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
   const history = useHistory();
   let location = useLocation();
   
-  //проверка токена
+  // Стейты фильмов
+  const [initialMovies, setInitialMovies] = React.useState([]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  const [filterMovies, setFilterMovies] = React.useState([]);
+  const [filterSavedMovies, setFilterSavedMovies] = React.useState([]);
+  const [keyWord, setKeyWord] = React.useState('');
+
+  // Стейты информационного сообщения
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+
+  // проверка токена
   React.useEffect(() => {
-    
     const path = location.pathname;
     const token = localStorage.getItem('token');
     if (token) {
@@ -48,30 +59,79 @@ function App() {
         });
     }
   }, []);
+  
+  // Получение списка всех фильмов
+  React.useEffect(() => {
+    if(loggedIn){
+    moviesApi.getMovies()
+    .then((data) => {
+      localStorage.setItem('initialMovies', JSON.stringify(formatMovie(data)));
+      const allMovie = JSON.parse(localStorage.getItem('initialMovies'));
+      if (allMovie) {
+        setInitialMovies(allMovie);
+      }else{
+        setInitialMovies(formatMovie(data));
+      }
+    })
+    .catch((err) => {
+      localStorage.removeItem('initialMovies');
+      setLoadingError('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
+    })
+  }
+}, [loggedIn])
 
-  //регистрация
-  function onSubmitRegister({name, email, password}) {
-    if (!name || !email || !password) {
+  // Получение списка сохранённых фильмво
+  React.useEffect(() => {
+    if(loggedIn){
+      mainApi.getMovies()
+      .then((data) => {
+        const savedMovies = data.map((item) => {
+          return {...item, id: item.movieId}
+        })
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
+        const saveMovie = JSON.parse(localStorage.getItem('savedMovies'))
+        if(saveMovie){
+          setSavedMovies(saveMovie);
+        }else {
+          setSavedMovies(savedMovies);
+        }
+      })
+      .catch((err) => {
+        localStorage.removeItem('savedMovies');
+        setLoadingError('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
+      })
+    }
+  }, [loggedIn])
+
+  React.useEffect(() => {
+    setFilterSavedMovies(filter(savedMovies, keyWord));
+    localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
+  }, [savedMovies])
+
+  // регистрация
+  function onSubmitRegister( data ) {
+    console.log(data.nameInput);
+    if (!data.nameInput || !data.emailInput || !data.passwordInput) {
       return;
     }
-    mainApi.register(name, email, password)
+    mainApi.register(data.nameInput, data.emailInput, data.passwordInput)
       .then((res) => {
         if (res) {
-          login(email, password);
+          login(res.email, res.password);
         }
       })
       .catch(err => {
         if (err.status === 409) {
-          setTextPopup('Пользователь с таким email уже существует');
-          setIsInfoPopupOpen(true);
+          setMessage('Пользователь с таким email уже существует');
+          setIsInfoTooltipOpen(true);
         } else {
-          setTextPopup('При регистрации пользователя произошла ошибка');
-          setIsInfoPopupOpen(true);
+          setMessage('При регистрации пользователя произошла ошибка');
+          setIsInfoTooltipOpen(true);
         }
       })
   }
 
-  //авторизация
+  // авторизация
   function login(email, password) {
     mainApi.login(email, password)
     .then((res) => {
@@ -84,20 +144,20 @@ function App() {
     })
     .catch(err => {
       if (err.status === 400) {
-        setTextPopup('Неверный email или пароль');
-        setIsInfoPopupOpen(true);
+        setMessage('Неверный email или пароль');
+        setIsInfoTooltipOpen(true);
       } else {
-        setTextPopup('При авторизации произошла ошибка');
-        setIsInfoPopupOpen(true);
+        setMessage('При авторизации произошла ошибка');
+        setIsInfoTooltipOpen(true);
       }
     })
   }
 
-  function onSubmitLogin({email, password}) {
-    if (!email || !password) {
+  function onSubmitLogin(user) {
+    if (!user.emailInput || !user.passwordInput) {
       return;
     }
-    login(email, password);
+    login(user.emailInput, user.passwordInput);
   }
 
   // получить данные текущего пользователя 
@@ -120,16 +180,16 @@ function App() {
     mainApi.saveProfile(data)
       .then((profile) => {
         setCurrentUser(profile);
-        setTextPopup('Профиль успешно обновлен');
-        setIsInfoPopupOpen(true);
+        setMessage('Профиль успешно обновлен');
+        setIsInfoTooltipOpen(true);
       })
       .catch((err) => {
         if (err.status === 409) {
-          setTextPopup('Пользователь с таким email уже существует');
+          setMessage('Пользователь с таким email уже существует');
         } else {
-          setTextPopup('При обновлении профиля произошла ошибка');
+          setMessage('При обновлении профиля произошла ошибка');
         }
-        setIsInfoPopupOpen(true);
+        setIsInfoTooltipOpen(true);
       })
   }
 
@@ -150,88 +210,26 @@ function App() {
       history.push('/');
   }
 
-  /*** поиск фильма ***/
-  const [initialMovies, setInitialMovies] = React.useState([]);
-  const [savedMovies, setSavedMovies] = React.useState([]);
-  const [filterMovies, setFilterMovies] = React.useState([]);
-  const [filterSavedMovies, setFilterSavedMovies] = React.useState([]);
-  const [query, setQuery] = React.useState('');
-
-  function getInitialMovies() {
-
-    moviesApi.getMovies()
-    .then((data) => {
-      const initialArray = data.map((item) => {
-        const imageURL = item.image ? item.image.url : '';
-        return {
-          ...item, 
-          image: `https://api.nomoreparties.co${imageURL}`,
-          trailer: item.trailerLink,
-        }
-      })
-
-      localStorage.setItem('initialMovies', JSON.stringify(initialArray));
-      setInitialMovies(initialArray);
+  function formatMovie(movies){
+    return movies.map((item)=>{
+      return {
+        ...item,
+        image: item.image? `https://api.nomoreparties.co${item.image.url}` : '',
+        thumbnail: item.image ? `https://api.nomoreparties.co${item.image.formats.thumbnail.url}` : '',
+        trailer: item.trailerLink,
+        movieId: item.id,
+      }
     })
-    .catch((err) => {
-      localStorage.removeItem('initialMovies');
-      setLoadingError('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
-    })
-
   }
-
-  function getSavedMovies() {
-    mainApi.getMoveis()
-      .then((data) => {
-        const savedArray = data.map((item) => {
-          return {...item, id: item.movieId}
-        })
-        localStorage.setItem('savedMovies', JSON.stringify(savedArray));
-        setSavedMovies(savedArray);
-      })
-      .catch((err) => {
-        localStorage.removeItem('savedMovies');
-        setLoadingError('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
-      })
-  }
-
-  React.useEffect(() => {
-    const initial = JSON.parse(localStorage.getItem('initialMovies'));
-    if (initial) {
-      setInitialMovies(initial);
-    } else {
-      getInitialMovies();
-    }
-  }, [])
-  
-  React.useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('savedMovies'));
-    if (saved) {
-      setSavedMovies(saved)
-    } else {
-      getSavedMovies(); 
-    } 
-  }, [])
-
-  React.useEffect(() => {
-    if (loggedIn) {
-      //после авторизации обновим данные для текущего пользователя
-      getInitialMovies();
-      getSavedMovies();
-    }
-  }, [loggedIn])
 
 
   function isSavedMovie(movie) {
-    return savedMovies.some((item) => item.id === movie.id)
+    return savedMovies.some((item) => item.id === movie.movieId)
   }
 
-  function filter(data, query) {
-    if (query) {
-      const regex = new RegExp(query,'gi');
-      const filterData = data.filter((item) => {
-        return regex.test(item.nameRU) || regex.test(item.nameEN);
-      });
+  function filter(data, keyWord) {
+    if (keyWord) {
+      const filterData = data.filter((item) => (item.nameRU.toLowerCase().includes(keyWord.toLowerCase())));
       if (filterData.length === 0) {
         setLoadingError('Ничего не найдено');
       } else {
@@ -242,25 +240,27 @@ function App() {
     return [];
   }
 
-  function onSubmitSearch(query) {
+  // Поиск фильмов в массиве инициализируемых фильмов
+  function onSubmitSearch(keyWord) {
     setIsLoading(true);
     setTimeout(() => {
-      setQuery(query);
-      setFilterMovies(filter(initialMovies, query));
+      setKeyWord(keyWord);
+      setFilterMovies(filter(initialMovies, keyWord));
       setIsLoading(false);
-    }, 500)
+    }, 1000)
   }
 
-  function onSubmitSearchSaved(query) {
+  // Поиск фильмов в массиве сохраненных фильмов
+  function onSubmitSearchSaved(keyWord) {
     setIsLoading(true);
     setTimeout(() => {
-      setQuery(query);
-      setFilterSavedMovies(filter(savedMovies, query));
+      setKeyWord(keyWord);
+      setFilterSavedMovies(filter(savedMovies, keyWord));
       setIsLoading(false);
-    }, 500)
+    }, 1000)
   }
 
-  //избранное
+// Фнукция для добавление или удаления фильмов
   function onBookmarkClick(movie, isMarked) {
     if (isMarked) {
       addMovie(movie);
@@ -269,20 +269,20 @@ function App() {
     }
   }
 
-  //удаление из избранного
+// удаление фильма из избранных
   function deleteMovie(movie) {
-    const movieId = savedMovies.find((item) => item.id === movie.id)._id;
-    mainApi.deleteMovies(movieId)
+    const deleteMovieId = savedMovies.find((item) => item.id === movie.id)._id;
+    mainApi.deleteMovies(deleteMovieId)
     .then((res) => {
       if (res) {
-        const newArray = savedMovies.filter((item) => item.movieId !== res.movieId);
+        const newArray = savedMovies.filter((item) => item.movieId !== res.deleteMovieId);
+        console.log(newArray);
         setSavedMovies(newArray);
       }
     })
     .catch((err) => {
-      console.log(movieId);
-      setTextPopup('На сервере произошла ошибка');
-      setIsInfoPopupOpen(true);
+      setMessage('На сервере произошла ошибка');
+      setIsInfoTooltipOpen(true);
     })
   }
 
@@ -293,23 +293,15 @@ function App() {
       setSavedMovies([...savedMovies, {...res, id: res.movieId}])
    })
     .catch((err) => {
-      setTextPopup('На сервере произошла ошибка');
-      setIsInfoPopupOpen(true);
+      setMessage('На сервере произошла ошибка');
+      setIsInfoTooltipOpen(true);
     })
   }
   
-  React.useEffect(() => {
-    setFilterSavedMovies(filter(savedMovies, query));
-    localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
-  }, [savedMovies])
-
-  /*** попап ***/
-  const [isInfoPopupOpen, setIsInfoPopupOpen] = React.useState(false);
-  const [textPopup, setTextPopup] = React.useState('');
-
+// Закрыть попап и очистить сообщение
   function onClosePopup() {
-    setIsInfoPopupOpen(false);
-    setTextPopup('');
+    setIsInfoTooltipOpen(false);
+    setMessage('');
   }
 
 
@@ -361,7 +353,7 @@ function App() {
         />
 
         <Route path='/signup'>
-          <Register onSubmitRegister={onSubmitRegister}/>
+          <Register onSubmitRegister={onSubmitRegister} />
         </Route>
 
         <Route path='/signin'>
@@ -374,8 +366,8 @@ function App() {
       </Switch>
 
       <Popup 
-          title={textPopup} 
-          isOpenPopup={isInfoPopupOpen} 
+          title={message} 
+          isOpenPopup={isInfoTooltipOpen} 
           onClosePopup={onClosePopup}
         />      
 

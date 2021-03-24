@@ -5,6 +5,7 @@ function FilterButton({onFilter}) {
 
   function handleOnChange(evt) {
     onFilter(evt.target.checked);
+    console.log(evt.target.checked);
   }
 
   return (

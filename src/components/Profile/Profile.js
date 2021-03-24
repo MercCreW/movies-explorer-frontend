@@ -1,6 +1,6 @@
 import React from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext.js';
-import { getErrorText, checkValid } from '../../utils/formValidator.js';
+import { getErrorText, checkValid, getErrorName, getErrorEmail, } from '../../utils/formValidator.js';
 import './Profile.css';
 
 
@@ -12,65 +12,40 @@ function Profile({onSaveProfile, onSignOut}) {
       setViewMode(false) 
     }
 
-    const [formValues, setFormValues] = React.useState({
-        name: '',
-        email: ''
-      });
-      
+    const [nameInput, setNameInput] = React.useState('');
+    const [emailInput, setEmailInput] = React.useState('');
+    const [failName, setFailName] = React.useState('');
+    const [failEmail, setFailEmail] = React.useState('');
+
       const currentUser = React.useContext(CurrentUserContext);
-      React.useEffect(() => {
-        setFormValues({
-          ...formValues,
-          name: currentUser.name || '',
-          email: currentUser.email || ''
-        })
+      React.useEffect( () => {
+        setNameInput(currentUser.name || '');
+        setEmailInput(currentUser.email || '');
       }, [currentUser]);
+
     
-      function handleInputChange(evt) {
-        const { name, value } = evt.target;   
-        setFormValues({
-          ...formValues,
-          [name] : value 
-        });
+      function handleNameInputChange(evt){
+        setNameInput(evt.target.value);
       }
+      React.useEffect(()=>{
+        setFailName(getErrorName(nameInput));
+      },[nameInput])
     
-      /** валидация формы **/
-      const [errors, setErrors] = React.useState({
-        name: {
-          required: '',
-          minLength: '',
-          maxLength: '',
-        },
-        email: {
-          required: '',
-          minLength: '',
-          isEmail: '',
-        },
-      });
-      const [isNameValid, setIsNameValid] = React.useState(false);
-      const [isEmailValid, setIsEmailValid] = React.useState(false);
+    
+      function handleEmailInputChange(evt){
+        setEmailInput(evt.target.value);
+      }
+      React.useEffect(()=>{
+        setFailEmail(getErrorEmail(emailInput));
+      },[emailInput])
+
       const [isSubmitDisabled, setIsSubmitDisabled] = React.useState(true);
+
     
-      React.useEffect(() => {
-        
-        const { name, email } = formValues;
-        
-        const nameValid = checkValid('name', name);
-        const emailValid = checkValid('email', email);
-    
-        setErrors({
-          name: nameValid,
-          email: emailValid,
-        });
-    
-        const nameVal = Object.values(nameValid).every((item) => item === '');
-        const emailVal = Object.values(emailValid).every((item) => item === '');
-        setIsNameValid(nameVal);
-        setIsEmailValid(emailVal);
-        
-        setIsSubmitDisabled(!nameVal || !emailVal );   
-    
-      }, [formValues]);
+      React.useEffect(()=>{
+        setIsSubmitDisabled(failName || failEmail)
+      },[failName, failEmail])
+
     
       /* кнопка выйти из аккаунта */
       function handleSignOut() {
@@ -80,7 +55,8 @@ function Profile({onSaveProfile, onSignOut}) {
       /* кнопка сохранить */
       function handleOnSubmit(evt) {
         evt.preventDefault();
-        onSaveProfile(formValues);
+        onSaveProfile({nameInput, emailInput});
+        setViewMode(true);
       }
 
     
@@ -93,18 +69,18 @@ function Profile({onSaveProfile, onSignOut}) {
                  <label className="profile__label">Имя
                     <input className="profile__input profile__input_type_name" id="name-input" type="text"
                     name="name" placeholder="Имя" required minLength="2" maxLength="30" 
-                    value={formValues.name} onChange={handleInputChange}/>
+                    value={nameInput} onChange={handleNameInputChange}/>
                  </label>
-               <span className={`profile__error ${!isNameValid && 'profile__error-visible'}`}>{getErrorText(errors.name)}</span>
+               <span className={`profile__error ${failName && 'profile__error-visible'}`}>{failName}</span>
                </article>
                <article className="profile__info-container">
                   <label className="profile__label">Почта
                       <input className="profile__input profile__input_type_email" id="email-input" type="text"
                                  name="email" placeholder="Почта" required minLength="5" maxLength="100" 
-                                 value={formValues.email} onChange={handleInputChange}/>
+                                 value={emailInput} onChange={handleEmailInputChange}/>
                   </label>
                </article>
-               <span className={`profile__error ${!isEmailValid && 'profile__error-visible'}`}>{getErrorText(errors.email)}</span>
+               <span className={`profile__error ${emailInput && 'profile__error-visible'}`}>{failEmail}</span>
                <div className="profile__buttons">
                    {viewMode ? (
                        <>

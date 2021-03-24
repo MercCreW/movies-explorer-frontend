@@ -76,14 +76,14 @@ export class MainApi {
             "Authorization" : `Bearer ${token}`
           },
           body: JSON.stringify({
-            name: data.name,
-            email: data.email
+            name: data.nameInput,
+            email: data.emailInput
           })
         }))
     }
   
       //все фильмы
-      getMoveis() {
+      getMovies() {
         const token = localStorage.getItem('token');
         return this._getResponseData(fetch(`${this._baseUrl}/movies`, {
           method: 'GET',
